@@ -4,6 +4,7 @@ import 'package:groundlia/Pages/Extra/loading_container.dart';
 import 'package:groundlia/Pages/util/Data.dart';
 import 'package:groundlia/Pages/util/widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:groundlia/Pages/Api/storing_locally.dart';
 
 import 'Extra/loading.dart';
 
@@ -26,7 +27,7 @@ class _loginState extends State<login> {
           borderRadius: BorderRadius.all(Radius.circular(20))
       ),
       width: MediaQuery.of(context).size.width - 100,
-      height: 50.0,
+      padding: EdgeInsets.all(5.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,6 +62,59 @@ class _loginState extends State<login> {
     super.initState();
   }
 
+ Widget button(String name){
+    return GestureDetector(
+      onTap: () async {
+        if(name == "Done") {
+          setState(() {
+            isloading = true;
+          });
+          upload up = upload();
+          if (data1.name != "" && data1.code != "")
+            data1.Authorisation = await up.IsAuthorized(data1);
+          if
+          (data1.Authorisation == "Watcher" ||
+              data1.Authorisation == "Organiser" ||
+              data1.Authorisation == "Volunteer"
+          ) {
+            relogin login = relogin();
+            await login.writefile(data1.Authorisation);
+            Navigator.of(context).pop(true);
+            Navigator.pushNamed(context, "/done");
+          }
+          else {
+            Fluttertoast.showToast(
+                msg: "Error in login\nor the login credentials are wrong",
+                backgroundColor: Colors.black,
+                textColor: Colors.white);
+            setState(() {
+              isloading = false;
+            });
+          }
+        }
+        else if(name == "Signup As Organizer"){
+          Navigator.pushNamed(context, "/signup");
+        }
+        else if(name == "Previous login"){
+          Navigator.pushNamed(context, "/relogin");
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+            color: Colors.lightGreen[400],
+            borderRadius: BorderRadius.all(Radius.circular(10))
+        ),
+        child: Text(name, style: TextStyle(
+          fontSize: 20.0,
+          fontWeight: FontWeight.w700,
+          fontFamily: "mainfont",
+        ),),
+      ),
+    );
+ }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -80,67 +134,13 @@ class _loginState extends State<login> {
                     Input("user", "Enter Name"),
                     Input("key", "Access code"),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        GestureDetector(
-                          onTap: () async {
-                            setState(() {
-                              isloading = true;
-                            });
-                            upload up = upload();
-                            if(data1.name != "" && data1.code != "")
-                            data1.Authorisation = await up.IsAuthorized(data1);
-                            if
-                            (data1.Authorisation == "Watcher" ||
-                                data1.Authorisation == "Organiser" ||
-                                data1.Authorisation == "Volunteer"
-                            ){
-                            Navigator.of(context).pop(true);
-                            Navigator.pushNamed(context, "/done");
-                            }
-                            else {
-                                  Fluttertoast.showToast(
-                                  msg: "Error in login\nor the login credentials are wrong",
-                                  backgroundColor: Colors.black,
-                                  textColor: Colors.white);
-                            }
-                          },
-                          child: Container(
-                            height: 45.0,
-                            width: 70.0,
-                            margin: EdgeInsets.only(top: 20.0),
-                            decoration: BoxDecoration(
-                                color: Colors.lightGreen[300],
-                                borderRadius: BorderRadius.all(Radius.circular(10))
-                            ),
-                            child: Center(child: Text("Done", style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: "mainfont",
-                            ),),),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.pushNamed(context, "/signup");
-                          },
-                          child: Container(
-                            height: 45.0,
-                            width: MediaQuery.of(context).size.width - 140,
-                            margin: EdgeInsets.only(top: 20.0),
-                            decoration: BoxDecoration(
-                                color: Colors.lightGreen[300],
-                                borderRadius: BorderRadius.all(Radius.circular(10))
-                            ),
-                            child: Center(child: Text("Signup for Organizer", style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: "mainfont",
-                            ),),),
-                          ),
-                        ),
+                        button("Previous login"),
+                        button("Done"),
                       ],
-                    )
+                    ),
+                    button("Signup As Organizer"),
                   ],
                 ),
               ),

@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:groundlia/Pages/Api/download.dart';
 import 'package:groundlia/Pages/Api/storing_locally.dart';
 import 'package:groundlia/Pages/Extra/loading_container.dart';
-import 'package:groundlia/Pages/player_data/Admin_file.dart';
 import 'package:groundlia/Pages/util/Data.dart';
 import 'package:groundlia/Pages/util/widget.dart';
-
-admin_file file = new admin_file();
 
 class SelectSport extends StatefulWidget {
 
@@ -88,6 +85,7 @@ class _SelectSportState extends State<SelectSport> {
       },
       child:Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: EdgeInsets.only(top: 4.0, bottom: 4.0),
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.all(Radius.circular(30.0)),
@@ -96,7 +94,7 @@ class _SelectSportState extends State<SelectSport> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(left: 10.0),
+              padding: EdgeInsets.only(left: 8.0),
               child: Icon(
                 icon,
                 color: Colors.white,
@@ -104,7 +102,7 @@ class _SelectSportState extends State<SelectSport> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 20.0),
+              padding: EdgeInsets.only(left: 20.0,right: 10.0),
               child: Text(name,
                 style: TextStyle(
                     color: Colors.white,
@@ -131,10 +129,10 @@ class _SelectSportState extends State<SelectSport> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Heading("Editor Panel",context),
-                Options(Icons.sports_cricket_outlined, "Cricket",context,45),
-                Options(Icons.sports_basketball_outlined, "Basketball",context,45),
-                Options(Icons.sports_tennis_outlined, "Badminton",context,45),
-                Options(Icons.watch_later, "Watch Ongoing game\n(If Any)",context,25),
+                Options(Icons.sports_cricket_outlined, "Cricket",context,40),
+                Options(Icons.sports_tennis_outlined, "Badminton",context,40),
+                Options(Icons.sports_basketball_outlined, "Basketball",context,40),
+                Options(Icons.watch_later, "Watch Ongoing game",context,20),
               ]
           ),
         ),
